@@ -75,4 +75,20 @@ public class UserConstants
      */
     public static final int PASSWORD_MIN_LENGTH = 5;
     public static final int PASSWORD_MAX_LENGTH = 20;
+
+
+    /**
+     * 用户类型 00系统用户
+     */
+    public static final String USER_TYPE_SYSTEM = "00";
+
+    /**
+     * 员工
+     */
+    public static final String USER_TYPE_EM = "01";
+
+    /**
+     * 员工编号前缀
+     */
+    public static final String JOB_ID_PREFIX = "MB-";
 }

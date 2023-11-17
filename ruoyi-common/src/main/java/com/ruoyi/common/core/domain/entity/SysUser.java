@@ -25,6 +25,10 @@ public class SysUser extends BaseEntity
     @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
 
+    /** 员工编号（MB-0000001） */
+    @Excel(name = "员工编号")
+    private String jobId;
+
     /** 部门ID */
     @Excel(name = "部门编号", type = Type.IMPORT)
     private Long deptId;
@@ -36,6 +40,9 @@ public class SysUser extends BaseEntity
     /** 用户昵称 */
     @Excel(name = "用户名称")
     private String nickName;
+
+    @Excel(name = "用户类型（00系统用户，01员工）")
+    private String userType;
 
     /** 用户邮箱 */
     @Excel(name = "用户邮箱")
@@ -109,6 +116,14 @@ public class SysUser extends BaseEntity
         this.userId = userId;
     }
 
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
     public boolean isAdmin()
     {
         return isAdmin(this.userId);
@@ -164,6 +179,15 @@ public class SysUser extends BaseEntity
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     @Size(min = 0, max = 11, message = "手机号码长度不能超过11个字符")
@@ -301,9 +325,11 @@ public class SysUser extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("userId", getUserId())
+            .append("jobId", getJobId())
             .append("deptId", getDeptId())
             .append("userName", getUserName())
             .append("nickName", getNickName())
+            .append("userType", getUserType())
             .append("email", getEmail())
             .append("phonenumber", getPhonenumber())
             .append("sex", getSex())

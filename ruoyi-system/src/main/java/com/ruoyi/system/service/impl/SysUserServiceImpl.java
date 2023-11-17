@@ -2,6 +2,7 @@ package com.ruoyi.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
 import org.slf4j.Logger;
@@ -71,7 +72,22 @@ public class SysUserServiceImpl implements ISysUserService
     @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUserList(SysUser user)
     {
-        return userMapper.selectUserList(user);
+        List<SysUser> sysUserList = userMapper.selectUserList(user);
+
+        if (!SecurityUtils.isAdmin()) {
+            sysUserList.forEach(item -> {
+                String phonenumber = item.getPhonenumber();
+                // 176****5698
+                phonenumber =
+                        phonenumber.substring(0, 3) + "****" + phonenumber.substring(phonenumber.length() - 4);
+                item.setPhonenumber(phonenumber);
+            });
+
+            sysUserList = sysUserList.stream().filter(item -> {
+                return UserConstants.USER_TYPE_EM.equals(item.getUserType());
+            }).collect(Collectors.toList());
+        }
+        return sysUserList;
     }
 
     /**
@@ -256,6 +272,23 @@ public class SysUserServiceImpl implements ISysUserService
     @Transactional
     public int insertUser(SysUser user)
     {
+        // TODO SysUser没有user_type对应的字段 以后需要添加
+        Integer count = userMapper.countByType(UserConstants.USER_TYPE_EM);
+        if (!Objects.isNull(count)) {
+            StringBuilder stringBuilder = new StringBuilder();
+            // 当前用户的位数
+            count++;
+            String string = count.toString();
+            int a = 7 - string.length();
+            for (int i = 0; i < a; i++) {
+                stringBuilder.append("0");
+            }
+            String jobId = UserConstants.JOB_ID_PREFIX + stringBuilder.toString() + count;
+            // 设置员工编号
+            user.setJobId(jobId);
+        }
+        // 设置用户类型 默认员工
+        user.setUserType(UserConstants.USER_TYPE_EM);
         // 新增用户信息
         int rows = userMapper.insertUser(user);
         // 新增用户岗位关联
@@ -274,6 +307,23 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public boolean registerUser(SysUser user)
     {
+        // TODO SysUser没有user_type对应的字段 以后需要添加
+        Integer count = userMapper.countByType(UserConstants.USER_TYPE_EM);
+        if (!Objects.isNull(count)) {
+            StringBuilder stringBuilder = new StringBuilder();
+            // 当前用户的位数
+            count++;
+            String string = count.toString();
+            int a = 7 - string.length();
+            for (int i = 0; i < a; i++) {
+                stringBuilder.append("0");
+            }
+            String jobId = UserConstants.JOB_ID_PREFIX + stringBuilder.toString() + count;
+            // 设置员工编号
+            user.setJobId(jobId);
+        }
+        // 设置用户类型 默认员工
+        user.setUserType(UserConstants.USER_TYPE_EM);
         return userMapper.insertUser(user) > 0;
     }
 
@@ -501,6 +551,23 @@ public class SysUserServiceImpl implements ISysUserService
                     BeanValidators.validateWithException(validator, user);
                     user.setPassword(SecurityUtils.encryptPassword(password));
                     user.setCreateBy(operName);
+                    // TODO SysUser没有user_type对应的字段 以后需要添加
+                    Integer count = userMapper.countByType(UserConstants.USER_TYPE_EM);
+                    if (!Objects.isNull(count)) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        // 当前用户的位数
+                        count++;
+                        String string = count.toString();
+                        int a = 7 - string.length();
+                        for (int i = 0; i < a; i++) {
+                            stringBuilder.append("0");
+                        }
+                        String jobId = UserConstants.JOB_ID_PREFIX + stringBuilder.toString() + count;
+                        // 设置员工编号
+                        user.setJobId(jobId);
+                    }
+                    // 设置用户类型 默认员工
+                    user.setUserType(UserConstants.USER_TYPE_EM);
                     userMapper.insertUser(user);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、账号 " + user.getUserName() + " 导入成功");

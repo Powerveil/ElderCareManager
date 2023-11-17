@@ -125,6 +125,18 @@ public class SecurityUtils
         return userId != null && 1L == userId;
     }
 
+
+    /**
+     * 是否为管理员2
+     *
+     * @return 结果
+     */
+    public static boolean isAdmin()
+    {
+        Long userId = getUserId();
+        return userId != null && 1L == userId;
+    }
+
     /**
      * 验证用户是否具备某权限
      * 
