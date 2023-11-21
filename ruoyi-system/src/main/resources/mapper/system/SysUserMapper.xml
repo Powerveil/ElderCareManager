@@ -218,6 +218,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from sys_user
 		where user_type = #{userType}
 	</select>
+	<select id="selectUserByQuery" parameterType="UserQuery" resultMap="SysUserResult">
+		select u.user_id, u.job_id, u.dept_id, u.user_name, u.nick_name, u.user_type, u.email, u.avatar, u.phonenumber, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name, d.leader from sys_user u
+		left join sys_dept d on u.dept_id = d.dept_id
+		where u.del_flag = '0'
+		<if test="userQuery.userId != null and userQuery.userId != 0">
+			AND u.user_id = #{userQuery.userId}
+		</if>
+		<if test="userQuery.userName != null and userQuery.userName != ''">
+			AND u.user_name like concat('%', #{userQuery.userName}, '%')
+		</if>
+		<if test="userQuery.phonenumber != null and userQuery.phonenumber != ''">
+			AND u.phonenumber like concat('%', #{userQuery.phonenumber}, '%')
+		</if>
+	</select>
 
 	<delete id="deleteUserById" parameterType="Long">
  		update sys_user set del_flag = '2' where user_id = #{userId}

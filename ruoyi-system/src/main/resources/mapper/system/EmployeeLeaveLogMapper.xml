@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.EmployeeLeaveLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.system.domain.EmployeeLeaveLog">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="leaveReason" column="leave_reason" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="leaveStartTime" column="leave_start_time" jdbcType="TIMESTAMP"/>
+            <result property="leaveEndTime" column="leave_end_time" jdbcType="TIMESTAMP"/>
+            <result property="undoTime" column="undo_time" jdbcType="TIMESTAMP"/>
+            <result property="desc" column="desc" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="delFlag" column="del_flag" jdbcType="CHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,
+        leave_reason,`status`,leave_start_time,
+        leave_end_time,undo_time,`desc`,
+        create_time,update_time,del_flag
+    </sql>
+    <update id="agreeLeaveLog">
+        update employee_leave_log
+        set status = 1
+        where id in
+        <foreach collection="leaveLogIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+    <update id="disagreeLeaveLog">
+        update employee_leave_log
+        set status = 2
+        where id in
+        <foreach collection="leaveLogIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+    <update id="undoLeaveLogByIds">
+        update employee_leave_log
+        set status = 3
+        where id in
+        <foreach collection="leaveLogIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+</mapper>

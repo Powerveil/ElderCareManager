@@ -2,6 +2,7 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.system.domain.query.UserQuery;
 
 /**
  * 用户 业务层
@@ -203,4 +204,13 @@ public interface ISysUserService
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+
+    /**
+     * 通过条件查询用户
+     * （查询单个）
+     * @param userQuery 查询条件
+     * @return 用户对象信息
+     */
+    public SysUser selectUserByQuery(UserQuery userQuery);
 }

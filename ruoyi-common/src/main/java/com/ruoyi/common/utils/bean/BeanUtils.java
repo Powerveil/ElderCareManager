@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Bean 工具类
@@ -106,5 +107,26 @@ public class BeanUtils extends org.springframework.beans.BeanUtils
     public static boolean isMethodPropEquals(String m1, String m2)
     {
         return m1.substring(BEAN_METHOD_PROP_INDEX).equals(m2.substring(BEAN_METHOD_PROP_INDEX));
+    }
+
+    public static <V> V copyBean(Object source, Class<V> clazz) {
+        // 创建目标对象
+        V result = null;
+        try {
+            result = clazz.newInstance();
+            // 实现属性copy
+            BeanUtils.copyProperties(source, result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 返回结果
+        return result;
+    }
+
+
+    public static <T,V> List<V> copyBeanList(List<T> list, Class<V> clazz) {
+        return list.stream()
+                .map(o -> copyBean(o, clazz))
+                .collect(Collectors.toList());
     }
 }
