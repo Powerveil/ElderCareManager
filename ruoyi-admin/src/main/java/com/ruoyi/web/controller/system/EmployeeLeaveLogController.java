@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.system;
 
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
@@ -62,7 +63,9 @@ public class EmployeeLeaveLogController extends BaseController {
                 // 过滤条件查询，如果没有被过滤掉就填充值
                 .filter(item -> {
                     SysUser sysUser = userService.selectUserById(item.getUserId());
-                    if (Objects.isNull(sysUser)) {
+                    // 不能为空并要求user_type的类型是护工（“10”）
+                    if (Objects.isNull(sysUser) ||
+                        !sysUser.getUserType().equals(UserConstants.USER_TYPE_EM)) {
                         return false;
                     }
                     String userName = sysUser.getUserName();

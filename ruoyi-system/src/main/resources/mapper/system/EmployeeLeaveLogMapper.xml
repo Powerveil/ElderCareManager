@@ -26,7 +26,7 @@
     </sql>
     <update id="agreeLeaveLog">
         update employee_leave_log
-        set status = 1
+        set status = 1, `desc` = ''
         where id in
         <foreach collection="leaveLogIds" item="item" open="(" close=")" separator=",">
             #{item}
@@ -34,7 +34,7 @@
     </update>
     <update id="disagreeLeaveLog">
         update employee_leave_log
-        set status = 2
+        set status = 2, `desc` = '不同意'
         where id in
         <foreach collection="leaveLogIds" item="item" open="(" close=")" separator=",">
             #{item}

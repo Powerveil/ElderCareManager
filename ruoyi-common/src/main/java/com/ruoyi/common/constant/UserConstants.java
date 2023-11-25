@@ -85,7 +85,12 @@ public class UserConstants
     /**
      * 员工
      */
-    public static final String USER_TYPE_EM = "01";
+    public static final String USER_TYPE_EM = "10";
+
+    /**
+     * 老人
+     */
+    public static final String USER_TYPE_ORDER = "20";
 
     /**
      * 员工编号前缀

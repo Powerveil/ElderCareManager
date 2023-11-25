@@ -213,4 +213,9 @@ public interface ISysUserService
      * @return 用户对象信息
      */
     public SysUser selectUserByQuery(UserQuery userQuery);
+
+    /**
+     * 查询老人总人数
+     */
+    Integer count();
 }

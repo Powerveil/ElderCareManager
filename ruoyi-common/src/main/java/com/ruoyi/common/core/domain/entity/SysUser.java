@@ -66,6 +66,9 @@ public class SysUser extends BaseEntity
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
+    @Excel(name = "分配人数", readConverterExp = "0=正常,1=停用")
+    private Integer allocationCount;
+
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
@@ -241,6 +244,15 @@ public class SysUser extends BaseEntity
         this.status = status;
     }
 
+
+    public Integer getAllocationCount() {
+        return allocationCount;
+    }
+
+    public void setAllocationCount(Integer allocationCount) {
+        this.allocationCount = allocationCount;
+    }
+
     public String getDelFlag()
     {
         return delFlag;
@@ -336,6 +348,7 @@ public class SysUser extends BaseEntity
             .append("avatar", getAvatar())
             .append("password", getPassword())
             .append("status", getStatus())
+            .append("allocationCount", getAllocationCount())
             .append("delFlag", getDelFlag())
             .append("loginIp", getLoginIp())
             .append("loginDate", getLoginDate())

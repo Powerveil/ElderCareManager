@@ -616,4 +616,12 @@ public class SysUserServiceImpl implements ISysUserService
         SysUser sysUser = userMapper.selectUserByQuery(userQuery);
         return sysUser;
     }
+
+    /**
+     * 查询老人总人数
+     */
+    @Override
+    public Integer count() {
+        return userMapper.countByType(UserConstants.USER_TYPE_ORDER);
+    }
 }
