@@ -214,6 +214,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="resetUserPwd" parameterType="SysUser">
  		update sys_user set password = #{password} where user_name = #{userName}
 	</update>
+	<update id="allocationElderByIdList">
+		update sys_user
+		set allocation_count = allocation_count + 1
+		where user_id in
+		<foreach collection="elderIdList" item="elderId" open="(" separator="," close=")">
+			#{elderId}
+		</foreach>
+	</update>
 	<select id="countByType" resultType="java.lang.Integer">
 		select count(*)
 		from sys_user
@@ -232,6 +240,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="userQuery.phonenumber != null and userQuery.phonenumber != ''">
 			AND u.phonenumber like concat('%', #{userQuery.phonenumber}, '%')
 		</if>
+	</select>
+	<select id="getListIdByUserType" resultType="java.lang.Long">
+		select user_id
+		from sys_user
+		where user_type = #{userType}
+	</select>
+	<!--TODO 暂时不考虑VIP老人 0表示没有分配 1表示分配-->
+	<select id="getListIdForElder" resultType="java.lang.Long">
+		select user_id
+		from sys_user
+		where user_type = 20 and  allocation_count = #{allocationFlag};
+	</select>
+	<!--查询所有护工id并根据allocation_count升序返回-->
+	<select id="getListIdForSupportWorkerOrderByAllocationCount" resultType="java.lang.Long">
+		select user_id
+		from sys_user
+		where user_type = 10
+		order by allocation_count asc
 	</select>
 
 	<delete id="deleteUserById" parameterType="Long">

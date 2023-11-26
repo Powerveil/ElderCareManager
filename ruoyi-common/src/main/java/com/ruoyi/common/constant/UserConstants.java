@@ -96,4 +96,15 @@ public class UserConstants
      * 员工编号前缀
      */
     public static final String JOB_ID_PREFIX = "MB-";
+
+
+    /**
+     * 老人被分配
+     */
+    public static final Integer IS_ALLOCATION_FOR_ELDER = 1;
+
+    /**
+     * 老人没有被分配
+     */
+    public static final Integer NOT_ALLOCATION_FOR_ELDER = 0;
 }

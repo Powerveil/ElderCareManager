@@ -64,4 +64,11 @@ public interface IAllocationService
      */
     Integer count();
 
+    /**
+     *
+     * @param supportWorkerId 护工id
+     * @param elderIdListSub 老人idList
+     * @return
+     */
+    int insertAllocationBatch01(Long supportWorkerId, List<Long> elderIdListSub);
 }

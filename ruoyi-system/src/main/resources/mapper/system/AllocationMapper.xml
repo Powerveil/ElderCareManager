@@ -44,6 +44,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
          </trim>
     </insert>
+    <insert id="insertAllocationBatch01">
+        insert into allocation (support_worker_id, elder_id)
+        values
+        <foreach collection="elderIdListSub" item="elderId" separator=",">
+            (#{supportWorkerId}, #{elderId})
+        </foreach>
+    </insert>
 
     <update id="updateAllocation" parameterType="Allocation">
         update allocation

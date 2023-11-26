@@ -1,17 +1,16 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.bean.BeanUtils;
 import com.ruoyi.system.domain.AllocationVo;
 import com.ruoyi.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -149,13 +148,65 @@ public class AllocationController extends BaseController
 
 
     /**
-     * 查询老人被分配人数
+     * 查询老人没有被分配人数
      */
-    @GetMapping("/count")
-    public Integer count()
+    @GetMapping("/countForNot")
+    public Integer countForNot()
     {
         Integer allocationCount = allocationService.count();
         Integer totalCount = userService.count();
         return totalCount - allocationCount;//getAllocationCount
+    }
+
+    /**
+     * 自动化分配未分配的老人
+     */
+    @GetMapping("/automation")
+    @Transactional
+    public Integer automation()
+    {
+        // 查询所有护工ids，allocation_count升序
+        List<Long> supportWorkerIdList =
+                userService.getListIdForSupportWorkerOrderByAllocationCount();
+        // 查询没有被分配的老人ids
+        List<Long> elderIdList =
+                userService.getListIdForElder(UserConstants.NOT_ALLOCATION_FOR_ELDER);
+
+        // 分配算法 <人少优先分配老人>
+        // 存放<supportWorkerId, List<elderId>>，key为护工id，value为老人idList
+//        Map<Long, List<Long>> supportWorkerIdToelderIdMap = new HashMap<>();
+        // 护工总数量
+        int supportWorkerCount = supportWorkerIdList.size();
+        // 老人总数量
+        int elderCount = elderIdList.size();
+
+        int insertCount = 0;
+
+        for (int i = 0; i < supportWorkerCount; i++) {
+            Long supportWorkerId = supportWorkerIdList.get(i);
+            int index = i;
+            // 每个supportWorkerId要分配的elderIdList
+            List<Long> elderIdListSub = new ArrayList<>();
+            while (index < elderCount) {
+                elderIdListSub.add(elderIdList.get(index));
+                index += supportWorkerCount;
+            }
+
+            insertCount += allocationService.insertAllocationBatch01(supportWorkerId, elderIdListSub);
+            // 放入map
+//            supportWorkerIdToelderIdMap.put(supportWorkerId, elderIdListSub);
+        }
+
+//        Set<Map.Entry<Long, List<Long>>> entries = supportWorkerIdToelderIdMap.entrySet();
+
+//        for (Map.Entry<Long, List<Long>> entry : entries) {
+//            Long key = entry.getKey();
+//
+//        }
+
+        // 将分配过的老人的allocation_count加1
+        Integer updateCount = userService.allocationElderByIdList(elderIdList);
+
+        return insertCount;
     }
 }

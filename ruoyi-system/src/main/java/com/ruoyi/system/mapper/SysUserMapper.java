@@ -137,4 +137,26 @@ public interface SysUserMapper
     Integer countByType(@Param("userType") String userTypeSystem);
 
     SysUser selectUserByQuery(@Param("userQuery") UserQuery userQuery);
+
+    /**
+     * 根据user_type查询所有用户id
+     * @param userType 用户类型
+     * @return
+     */
+    List<Long> getListIdByUserType(@Param("userType") String userType);
+
+    /**
+     * 查询没有被分配的老人ids
+     * @param allocationFlag 老人分配被标志
+     * @return
+     */
+    List<Long> getListIdForElder(@Param("allocationFlag") Integer allocationFlag);
+
+    /**
+     * 查询所有护工id并根据allocation_count升序返回
+     * @return
+     */
+    List<Long> getListIdForSupportWorkerOrderByAllocationCount();
+
+    Integer allocationElderByIdList(@Param("elderIdList") List<Long> elderIdList);
 }

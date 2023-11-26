@@ -624,4 +624,39 @@ public class SysUserServiceImpl implements ISysUserService
     public Integer count() {
         return userMapper.countByType(UserConstants.USER_TYPE_ORDER);
     }
+
+    /**
+     * 根据user_type查询所有用户id
+     * @param userType 用户类型
+     * @return
+     */
+    @Override
+    public List<Long> getListIdByUserType(String userType) {
+        return userMapper.getListIdByUserType(userType);
+    }
+
+    /**
+     * 查询没有被分配的老人ids
+     * @param allocationFlag 老人分配被标志
+     * @return
+     */
+    @Override
+    public List<Long> getListIdForElder(Integer allocationFlag) {
+        return userMapper.getListIdForElder(allocationFlag);
+    }
+
+
+    /**
+     * 查询所有护工id并根据allocation_count升序返回
+     * @return
+     */
+    @Override
+    public List<Long> getListIdForSupportWorkerOrderByAllocationCount() {
+        return userMapper.getListIdForSupportWorkerOrderByAllocationCount();
+    }
+
+    @Override
+    public Integer allocationElderByIdList(List<Long> elderIdList) {
+        return userMapper.allocationElderByIdList(elderIdList);
+    }
 }

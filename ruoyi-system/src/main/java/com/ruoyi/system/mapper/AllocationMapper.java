@@ -2,6 +2,7 @@ package com.ruoyi.system.mapper;
 
 import java.util.List;
 import com.ruoyi.system.domain.Allocation;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 护工分配Mapper接口
@@ -64,4 +65,12 @@ public interface AllocationMapper
      */
     Integer count();
 
+    /**
+     *
+     * @param supportWorkerId 护工id
+     * @param elderIdListSub 老人idList
+     * @return
+     */
+    int insertAllocationBatch01(@Param("supportWorkerId") Long supportWorkerId,
+                                @Param("elderIdListSub") List<Long> elderIdListSub);
 }

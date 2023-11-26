@@ -102,4 +102,15 @@ public class AllocationServiceImpl implements IAllocationService
     public Integer count() {
         return allocationMapper.count();
     }
+
+    /**
+     *
+     * @param supportWorkerId 护工id
+     * @param elderIdListSub 老人idList
+     * @return
+     */
+    @Override
+    public int insertAllocationBatch01(Long supportWorkerId, List<Long> elderIdListSub) {
+        return allocationMapper.insertAllocationBatch01(supportWorkerId, elderIdListSub);
+    }
 }
