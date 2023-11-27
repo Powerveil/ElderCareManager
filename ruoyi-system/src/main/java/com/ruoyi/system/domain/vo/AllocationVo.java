@@ -1,6 +1,7 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.system.domain.vo;
 
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.system.domain.Allocation;
 
 /**
  * @author Powerveil

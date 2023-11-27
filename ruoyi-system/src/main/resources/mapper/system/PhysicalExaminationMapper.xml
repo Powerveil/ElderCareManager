@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.PhysicalExaminationMapper">
+    
+    <resultMap type="PhysicalExamination" id="PhysicalExaminationResult">
+        <result property="id"    column="id"    />
+        <result property="examineeId"    column="examinee_id"    />
+        <result property="doctorId"    column="doctor_id"    />
+        <result property="examinationResult"    column="examination_result"    />
+        <result property="examinationLocation"    column="examination_location"    />
+        <result property="examinationDate"    column="examination_date"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPhysicalExaminationVo">
+        select id, examinee_id, doctor_id, examination_result, examination_location, examination_date, create_time, update_time from physical_examination
+    </sql>
+
+    <select id="selectPhysicalExaminationList" parameterType="PhysicalExamination" resultMap="PhysicalExaminationResult">
+        <include refid="selectPhysicalExaminationVo"/>
+        <where>  
+            <if test="examineeId != null "> and examinee_id = #{examineeId}</if>
+            <if test="doctorId != null "> and doctor_id = #{doctorId}</if>
+            <if test="examinationLocation != null  and examinationLocation != ''"> and examination_location = #{examinationLocation}</if>
+            <if test="examinationDate != null "> and examination_date = #{examinationDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectPhysicalExaminationById" parameterType="Long" resultMap="PhysicalExaminationResult">
+        <include refid="selectPhysicalExaminationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPhysicalExamination" parameterType="PhysicalExamination" useGeneratedKeys="true" keyProperty="id">
+        insert into physical_examination
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="examineeId != null">examinee_id,</if>
+            <if test="doctorId != null">doctor_id,</if>
+            <if test="examinationResult != null">examination_result,</if>
+            <if test="examinationLocation != null and examinationLocation != ''">examination_location,</if>
+            <if test="examinationDate != null">examination_date,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="examineeId != null">#{examineeId},</if>
+            <if test="doctorId != null">#{doctorId},</if>
+            <if test="examinationResult != null">#{examinationResult},</if>
+            <if test="examinationLocation != null and examinationLocation != ''">#{examinationLocation},</if>
+            <if test="examinationDate != null">#{examinationDate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePhysicalExamination" parameterType="PhysicalExamination">
+        update physical_examination
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="examineeId != null">examinee_id = #{examineeId},</if>
+            <if test="doctorId != null">doctor_id = #{doctorId},</if>
+            <if test="examinationResult != null">examination_result = #{examinationResult},</if>
+            <if test="examinationLocation != null and examinationLocation != ''">examination_location = #{examinationLocation},</if>
+            <if test="examinationDate != null">examination_date = #{examinationDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePhysicalExaminationById" parameterType="Long">
+        delete from physical_examination where id = #{id}
+    </delete>
+
+    <delete id="deletePhysicalExaminationByIds" parameterType="String">
+        delete from physical_examination where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

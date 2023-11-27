@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.bean.BeanUtils;
-import com.ruoyi.system.domain.AllocationVo;
+import com.ruoyi.system.domain.vo.AllocationVo;
 import com.ruoyi.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
