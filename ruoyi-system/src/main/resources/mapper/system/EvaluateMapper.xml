@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.EvaluateMapper">
+    
+    <resultMap type="Evaluate" id="EvaluateResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="userId"    />
+        <result property="content"    column="content"    />
+        <result property="result"    column="result"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectEvaluateVo">
+        select id, userId, content, result, start_time, end_time, create_time, update_time, del_flag from evaluate
+    </sql>
+
+    <select id="selectEvaluateList" parameterType="Evaluate" resultMap="EvaluateResult">
+        <include refid="selectEvaluateVo"/>
+        <where>  
+            <if test="userId != null "> and userId = #{userId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="result != null  and result != ''"> and result = #{result}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectEvaluateById" parameterType="Long" resultMap="EvaluateResult">
+        <include refid="selectEvaluateVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEvaluate" parameterType="Evaluate">
+        insert into evaluate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">userId,</if>
+            <if test="content != null">content,</if>
+            <if test="result != null">result,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="result != null">#{result},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEvaluate" parameterType="Evaluate">
+        update evaluate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">userId = #{userId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="result != null">result = #{result},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEvaluateById" parameterType="Long">
+        delete from evaluate where id = #{id}
+    </delete>
+
+    <delete id="deleteEvaluateByIds" parameterType="String">
+        delete from evaluate where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
