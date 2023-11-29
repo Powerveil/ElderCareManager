@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.RoomMapper">
+    
+    <resultMap type="Room" id="RoomResult">
+        <result property="id"    column="id"    />
+        <result property="roomNo"    column="room_no"    />
+        <result property="price"    column="price"    />
+        <result property="type"    column="type"    />
+        <result property="count"    column="count"    />
+        <result property="nowCount"    column="now_count"    />
+    </resultMap>
+
+    <sql id="selectRoomVo">
+        select id, room_no, price, type, count, now_count from room
+    </sql>
+
+    <select id="selectRoomList" parameterType="Room" resultMap="RoomResult">
+        <include refid="selectRoomVo"/>
+        <where>  
+            <if test="roomNo != null  and roomNo != ''"> and room_no = #{roomNo}</if>
+            <if test="price != null "> and price &gt;= #{price}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="count != null "> and count = #{count}</if>
+            <if test="nowCount != null "> and now_count = #{nowCount}</if>
+        </where>
+    </select>
+    
+    <select id="selectRoomById" parameterType="Long" resultMap="RoomResult">
+        <include refid="selectRoomVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRoom" parameterType="Room" useGeneratedKeys="true" keyProperty="id">
+        insert into room
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomNo != null">room_no,</if>
+            <if test="price != null">price,</if>
+            <if test="type != null">type,</if>
+            <if test="count != null">count,</if>
+            <if test="nowCount != null">now_count,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomNo != null">#{roomNo},</if>
+            <if test="price != null">#{price},</if>
+            <if test="type != null">#{type},</if>
+            <if test="count != null">#{count},</if>
+            <if test="nowCount != null">#{nowCount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRoom" parameterType="Room">
+        update room
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomNo != null">room_no = #{roomNo},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="count != null">count = #{count},</if>
+            <if test="nowCount != null">now_count = #{nowCount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRoomById" parameterType="Long">
+        delete from room where id = #{id}
+    </delete>
+
+    <delete id="deleteRoomByIds" parameterType="String">
+        delete from room where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
