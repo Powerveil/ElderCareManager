@@ -326,7 +326,11 @@ public class SysUserServiceImpl implements ISysUserService
         }
         // 设置用户类型 默认员工
         user.setUserType(UserConstants.USER_TYPE_EM);
-        return userMapper.insertUser(user) > 0;
+        boolean b = userMapper.insertUser(user) > 0;
+
+        // 默认普通用户
+        this.insertUserRole(user.getUserId(), new Long[] {2L});
+        return b;
     }
 
     /**
